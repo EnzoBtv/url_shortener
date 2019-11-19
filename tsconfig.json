@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "esModuleInterop": true,
+        "inlineSourceMap": true,
+        "target": "es2017",
+        "outDir": "./dist",
+        "module": "commonjs",
+        "baseUrl": "./src",
+        "typeRoots": ["node_modules/@types"]
+    },
+    "types": ["node", "reflect-metadata", "module.d.ts"],
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
+}
