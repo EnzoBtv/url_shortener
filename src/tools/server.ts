@@ -1,8 +1,8 @@
 import Express, { Application } from "express";
 import Database from "./database";
-import { IDatabase } from "./interfaces/database";
-import { IServer } from "./interfaces/server";
-import { IController } from "./interfaces/controller";
+import { IDatabase } from "../interfaces/database";
+import { IServer } from "../interfaces/server";
+import { IController } from "../interfaces/controller";
 
 class Server implements IServer {
     app: Application;

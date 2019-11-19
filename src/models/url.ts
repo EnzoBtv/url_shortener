@@ -6,6 +6,4 @@ const Url: Schema = new Schema({
     newUrl: { type: String, required: false }
 });
 
-export default (connection: Connection) => {
-    connection.model<IUrl>("url", Url);
-};
+export default (connection: Connection) => connection.model<IUrl>("url", Url);

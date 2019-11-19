@@ -11,12 +11,13 @@
         "mongoose": "^5.7.11"
     },
     "scripts": {
-        "start": "if test -d ~/Documentos/url_shortener/dist; then rm -R ./dist; fi; tsc;"
+        "start": "if test -d ~/Documentos/url_shortener/dist; then rm -R ./dist; fi; tsc; node ./dist"
     },
     "devDependencies": {
         "@types/express": "^4.17.2",
         "@types/mongoose": "^5.5.31",
         "@types/node": "^12.12.7",
+        "@types/reflect-metadata": "^0.1.0",
         "typescript": "^3.7.2"
     },
     "prettier": {
