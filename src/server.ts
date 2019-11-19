@@ -5,7 +5,6 @@ import { IServer } from "./interfaces/server";
 import { IController } from "./interfaces/controller";
 
 class Server implements IServer {
-    port: number;
     app: Application;
     controllers: IController[];
     database: IDatabase;
@@ -15,7 +14,7 @@ class Server implements IServer {
     }
 
     listen() {
-        this.app.listen(process.env.PORT, async err => {
+        this.app.listen(Number(process.env.PORT), async err => {
             if (err) throw new Error("Não foi possível inicializar ");
             console.log("Banco de dados inicializado com sucesso");
             await this.initializeDB();
