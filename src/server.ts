@@ -15,8 +15,8 @@ class Server implements IServer {
 
     listen() {
         this.app.listen(Number(process.env.PORT), async err => {
-            if (err) throw new Error("Não foi possível inicializar ");
-            console.log("Banco de dados inicializado com sucesso");
+            if (err) throw new Error("Não foi possível inicializar o servidor");
+            console.log(`Servidor rodando na porta ${process.env.PORT}`);
             await this.initializeDB();
 
             //@TODO Inicializar as controllers
