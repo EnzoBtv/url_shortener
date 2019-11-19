@@ -3,8 +3,6 @@ import { exec, ExecException } from "child_process";
 import { join } from "path";
 import { IDatabase } from "../interfaces/database";
 
-const arrombado = require;
-
 export default class Database implements IDatabase {
     username: string;
     password: string;
