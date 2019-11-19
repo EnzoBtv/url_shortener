@@ -17,7 +17,7 @@ export default class Database implements IDatabase {
     initialize(): Promise<null> {
         return new Promise((resolve, reject) => {
             this.connection = createConnection(
-                `mongodb+srv://omniuser:omniuser@cluster0-lun0k.mongodb.net/url_shortener?retryWrites=true&w=majority`,
+                `mongodb+srv://${this.username}:${this.password}@cluster0-lun0k.mongodb.net/${this.dbName}?retryWrites=true&w=majority`,
                 {
                     useNewUrlParser: true,
                     useUnifiedTopology: true,
