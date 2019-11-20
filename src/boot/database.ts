@@ -1,13 +1,14 @@
 import { createConnection, Connection } from "mongoose";
 import { exec, ExecException } from "child_process";
 import { join } from "path";
+import logger from "../tools/logger";
 import { IDatabase } from "../interfaces/database";
 
 export default class Database implements IDatabase {
     username: string;
     password: string;
     dbName: string;
-    connection: Connection;
+    private connection: Connection;
     constructor(username: string, password: string, dbName: string) {
         this.username = username;
         this.password = password;
@@ -26,8 +27,8 @@ export default class Database implements IDatabase {
                 }
             );
             this.connection.on("connected", () => {
-                console.log(
-                    "Conectado ao banco de dados na url mongodb+srv://omniuser:omniuser@cluster0-lun0k.mongodb.net/url_shortener?retryWrites=true&w=majority"
+                logger.info(
+                    `Conectado ao banco de dados na url mongodb+srv://${this.username}/${this.dbName}`
                 );
                 exec(
                     `ls ${join(__dirname, "..", "models")}`,
@@ -42,7 +43,7 @@ export default class Database implements IDatabase {
 
                         modelsArray.forEach(model => {
                             if (!model) return;
-                            require(`./models/${model.split(".")[0]}`).default(
+                            require(`../models/${model.split(".")[0]}`).default(
                                 this.connection
                             );
                         });
