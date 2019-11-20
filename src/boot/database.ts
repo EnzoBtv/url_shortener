@@ -30,7 +30,7 @@ export default class Database implements IDatabase {
                     "Conectado ao banco de dados na url mongodb+srv://omniuser:omniuser@cluster0-lun0k.mongodb.net/url_shortener?retryWrites=true&w=majority"
                 );
                 exec(
-                    `ls ${join(__dirname, "models")}`,
+                    `ls ${join(__dirname, "..", "models")}`,
                     (error: ExecException, stdout: string, stderr: string) => {
                         if (error || !stdout) {
                             throw new Error(
