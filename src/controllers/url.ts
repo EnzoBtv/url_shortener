@@ -1,5 +1,6 @@
 import { Router, Request, Response } from "express";
-import { model, Model } from "mongoose";
+
+import { Model, Connection } from "mongoose";
 import { v4 } from "uuid";
 
 import Logger from "../tools/logger";
@@ -12,10 +13,10 @@ export default class Url implements IController {
     public router: Router;
     private urlModel: Model<IUrl>;
 
-    constructor() {
+    constructor(connection: Connection) {
         this.path = "/url";
         this.router = Router();
-        this.urlModel = model("url");
+        this.urlModel = connection.model("url");
         this.init();
     }
 
@@ -23,12 +24,10 @@ export default class Url implements IController {
         this.router.post(this.path, this.create);
     }
 
-    private async create(request: Request, response: Response) {
+    private create = async (request: Request, response: Response) => {
         try {
             const { url } = request.body;
-            let oldUrl = this.urlModel.findOne({
-                originalUrl: url
-            });
+            let oldUrl = await this.urlModel.findOne();
             if (oldUrl) response.status(200).json(oldUrl);
             let newUrl = `https://shUrl.com/${v4()}`;
             response.status(200).json(
@@ -41,5 +40,5 @@ export default class Url implements IController {
             Logger.error(`Erro no processamento da url | Erro: ${ex.message}`);
             response.status(500).json({ error: ex.message });
         }
-    }
+    };
 }

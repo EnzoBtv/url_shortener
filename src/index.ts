@@ -6,4 +6,4 @@ config({
     path: join(__dirname, "..", "src", ".env")
 });
 
-new Server([]).listen();
+new Server().listen();

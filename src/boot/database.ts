@@ -8,7 +8,7 @@ export default class Database implements IDatabase {
     username: string;
     password: string;
     dbName: string;
-    private connection: Connection;
+    connection: Connection;
     constructor(username: string, password: string, dbName: string) {
         this.username = username;
         this.password = password;
@@ -16,7 +16,7 @@ export default class Database implements IDatabase {
     }
 
     initialize(): Promise<null> {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             this.connection = createConnection(
                 `mongodb+srv://${this.username}:${this.password}@cluster0-lun0k.mongodb.net/${this.dbName}?retryWrites=true&w=majority`,
                 {
@@ -26,7 +26,7 @@ export default class Database implements IDatabase {
                     keepAlive: true
                 }
             );
-            this.connection.on("connected", () => {
+            this.connection.on("open", () => {
                 logger.info(
                     `Conectado ao banco de dados na url mongodb+srv://${this.username}/${this.dbName}`
                 );
@@ -43,6 +43,7 @@ export default class Database implements IDatabase {
 
                         modelsArray.forEach(model => {
                             if (!model) return;
+                            logger.info(`Inicializando model ${model}`);
                             require(`../models/${model.split(".")[0]}`).default(
                                 this.connection
                             );
@@ -65,6 +66,10 @@ export default class Database implements IDatabase {
             });
             this.connection.on("reconnectFailed", () => {
                 console.log("Falha ao reconectar com o banco de dados");
+            });
+            this.connection.on("error", err => {
+                console.log("fuck");
+                console.log(err);
             });
         });
     }

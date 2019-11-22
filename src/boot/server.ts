@@ -1,4 +1,8 @@
 import Express, { Application } from "express";
+import cors from "cors";
+import { urlencoded, json } from "body-parser";
+import { exec, ExecException } from "child_process";
+import { join } from "path";
 
 import Database from "./database";
 
@@ -14,8 +18,7 @@ class Server implements IServer {
     app: Application;
     controllers: IController[];
     database: IDatabase;
-    constructor(controllers: IController[]) {
-        this.controllers = controllers;
+    constructor() {
         this.app = Express();
     }
 
@@ -39,12 +42,36 @@ class Server implements IServer {
     }
 
     private initializeMiddlewares() {
+        this.app.use(cors());
+        this.app.use(urlencoded({ extended: true }));
+        this.app.use(json());
         this.app.use(expressLogger);
     }
+
     private initializeControllers() {
-        for (let controller of this.controllers) {
-            this.app.use("/", controller.router);
-        }
+        exec(
+            `ls ${join(__dirname, "..", "controllers")}`,
+            (error: ExecException, stdout: string, stderr: string) => {
+                if (error || !stdout) {
+                    throw new Error(
+                        `Houve um erro ao ler as models | ${error || stderr}`
+                    );
+                }
+                let controllersArray: string[] = stdout.split("\n");
+                for (let controller of controllersArray) {
+                    if (controller) {
+                        let objController = require(`../controllers/${
+                            controller.split(".")[0]
+                        }`);
+                        this.app.use(
+                            "/",
+                            new objController.default(this.database.connection)
+                                .router
+                        );
+                    }
+                }
+            }
+        );
     }
 }
 
