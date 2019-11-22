@@ -29,7 +29,7 @@ export default class Url implements IController {
             const { url } = request.body;
             let oldUrl = await this.urlModel.findOne();
             if (oldUrl) response.status(200).json(oldUrl);
-            let newUrl = `https://shUrl.com/${v4()}`;
+            let newUrl = `https://shUrl.com/${v4().substring(0, 5)}`;
             response.status(200).json(
                 await new this.urlModel({
                     originalUrl: url,
