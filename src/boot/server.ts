@@ -25,7 +25,7 @@ class Server implements IServer {
             logger.info(`Servidor rodando na porta ${process.env.PORT}`);
             await this.initializeDB();
             this.initializeMiddlewares();
-            //@TODO Inicializar as controllers
+            this.initializeControllers();
         });
     }
 
@@ -40,6 +40,11 @@ class Server implements IServer {
 
     private initializeMiddlewares() {
         this.app.use(expressLogger);
+    }
+    private initializeControllers() {
+        for (let controller of this.controllers) {
+            this.app.use("/", controller.router);
+        }
     }
 }
 
