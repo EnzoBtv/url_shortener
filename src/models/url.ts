@@ -1,10 +1,11 @@
-import { Schema, Connection, model } from "mongoose";
+import { Schema, Connection, Types } from "mongoose";
 import { IUrl } from "../interfaces/url";
 import logger from "../tools/logger";
 
 const Url: Schema = new Schema({
     originalUrl: { type: String, required: true },
-    newUrl: { type: String, required: false }
+    newUrl: { type: String, required: false },
+    userId: { type: Types.ObjectId, required: false }
 });
 
 export default async (connection: Connection) => {
