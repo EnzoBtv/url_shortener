@@ -19,11 +19,11 @@ export default class Url implements IController {
         this.init();
     }
 
-    private init() {
+    init() {
         this.router.post(this.path, this.create);
     }
 
-    private create = async (request: Request, response: Response) => {
+    create = async (request: Request, response: Response) => {
         try {
             let { email, password, name } = request.body;
             if (!email || !password || !name)
@@ -38,7 +38,7 @@ export default class Url implements IController {
                     "Já existe um usuário cadastrado com esse email"
                 );
             password = enc.Base64.stringify(SHA512(password));
-            response.status(200).json(
+            return response.status(200).json(
                 await new this.userModel({
                     name,
                     password,
@@ -47,6 +47,21 @@ export default class Url implements IController {
             );
         } catch (ex) {
             Logger.error(`Erro na criação de usuário | Erro: ${ex.message}`);
+            response.status(500).json({ error: ex.message });
+        }
+    };
+
+    index = async (request: Request, response: Response) => {
+        try {
+            let { userId } = request.body;
+            let user = await this.userModel.findById(userId);
+            if (!user)
+                throw new Error(
+                    "Não foi encontrado nenhum usuário com o ID cadastrado"
+                );
+            return response.status(200).json({ user });
+        } catch (ex) {
+            Logger.error(`Erro na obtenção de usuário | Erro: ${ex.message}`);
             response.status(500).json({ error: ex.message });
         }
     };

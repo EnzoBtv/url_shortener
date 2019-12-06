@@ -20,14 +20,13 @@ export default class Url implements IController {
         this.init();
     }
 
-    private init() {
+    init() {
         this.router.post(this.path, this.create);
         this.router.get(`${this.path}/:id`, this.index);
     }
 
-    private create = async (request: Request, response: Response) => {
+    create = async (request: Request, response: Response) => {
         try {
-
             const { url, userId } = request.body;
             let oldUrl: IUrl = await this.urlModel.findOne({
                 originalUrl: url,
@@ -36,7 +35,7 @@ export default class Url implements IController {
             if (oldUrl)
                 throw new Error("Você já cadastrou essa URL anteriormente");
             let newUrl: string = `https://shUrl.com/${v4().substring(0, 5)}`;
-            response.status(200).json(
+            return response.status(200).json(
                 await new this.urlModel({
                     originalUrl: url,
                     newUrl
@@ -48,7 +47,7 @@ export default class Url implements IController {
         }
     };
 
-    private index = async (request: Request, response: Response) => {
+    index = async (request: Request, response: Response) => {
         try {
             const { id } = request.params;
             const url = await this.urlModel.findById(id);
@@ -56,7 +55,7 @@ export default class Url implements IController {
                 throw new Error(
                     "Não foi encontrada nenhuma url, por favor, entre em contato com o suporte"
                 );
-            return url;
+            return response.status(200).json({ url });
         } catch (ex) {
             Logger.error(`Erro no processamento da url | Erro: ${ex.message}`);
             response.status(500).json({ error: ex.message });
