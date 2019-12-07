@@ -4,5 +4,6 @@ declare namespace NodeJS {
         DB_PASSWORD: string;
         DB_NAME: string;
         PORT: string;
+        TOKEN_KEY: string;
     }
 }

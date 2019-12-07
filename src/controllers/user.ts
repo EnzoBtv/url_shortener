@@ -21,6 +21,7 @@ export default class Url implements IController {
 
     init() {
         this.router.post(this.path, this.create);
+        this.router.get(`${this.path}/:userId`, this.index);
     }
 
     create = async (request: Request, response: Response) => {
@@ -53,7 +54,7 @@ export default class Url implements IController {
 
     index = async (request: Request, response: Response) => {
         try {
-            let { userId } = request.body;
+            let { userId } = request.params;
             let user = await this.userModel.findById(userId);
             if (!user)
                 throw new Error(

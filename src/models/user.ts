@@ -5,7 +5,8 @@ import logger from "../tools/logger";
 const User: Schema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
-    password: { type: String, required: true }
+    password: { type: String, required: true },
+    token: { type: String, required: false }
 });
 
 export default async (connection: Connection) => {
