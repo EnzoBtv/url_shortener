@@ -69,7 +69,7 @@ export default class Auth extends IController {
                     "Não foi encontrado nenhum usuário com esse email"
                 );
             /**
-             * @TODO Mandar email para usuário com url personalizada
+             * @TODO Fazer tool de envio de email e fazer envio de email com url personalizada
              */
             return response.status(200).json({
                 success: true
