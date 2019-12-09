@@ -35,7 +35,7 @@ export default class Url extends IControllerRest {
             });
             if (oldUrl)
                 throw new Error("Você já cadastrou essa URL anteriormente");
-            let newUrl: string = `https://shUrl.com/${v4().substring(0, 5)}`;
+            let newUrl: string = `/${v4().substring(0, 5)}`;
             return response.status(200).json(
                 await new this.urlModel({
                     originalUrl: url,
@@ -62,4 +62,31 @@ export default class Url extends IControllerRest {
             response.status(500).json({ error: ex.message });
         }
     };
+
+    async edit(request: Request, response: Response) {
+        try {
+            const { newUrl, originalUrl, _id } = request.body;
+            const duplicateUrl = await this.urlModel.findOne({
+                newUrl
+            });
+            if (duplicateUrl)
+                throw new Error(
+                    "Já existe uma URL igual a essa cadastrada em nosso sistema"
+                );
+            const updatedUrl = await this.urlModel.findByIdAndUpdate(_id, {
+                $set: {
+                    newUrl,
+                    originalUrl
+                }
+            });
+            if (!updatedUrl)
+                throw new Error(
+                    "Não foi possível atualizar a URL em nosso sistema, entre em contato com o suporte"
+                );
+            return response.status(200).json({ success: true });
+        } catch (ex) {
+            Logger.error(`Erro no processamento da url | Erro: ${ex.message}`);
+            response.status(500).json({ error: ex.message });
+        }
+    }
 }
