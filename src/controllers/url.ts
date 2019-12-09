@@ -5,15 +5,16 @@ import { v4 } from "uuid";
 
 import Logger from "../tools/logger";
 
-import { IController } from "../interfaces/controller";
+import { IControllerRest } from "../interfaces/controller";
 import { IUrl } from "interfaces/url";
 
-export default class Url implements IController {
+export default class Url extends IControllerRest {
     public path: string;
     public router: Router;
     private urlModel: Model<IUrl>;
 
     constructor(connection: Connection) {
+        super();
         this.path = "/url";
         this.router = Router();
         this.urlModel = connection.model("url");

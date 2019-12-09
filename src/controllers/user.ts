@@ -4,10 +4,10 @@ import { SHA512, enc } from "crypto-js";
 
 import Logger from "../tools/logger";
 
-import { IController } from "../interfaces/controller";
+import { IControllerRest } from "../interfaces/controller";
 import { IUser } from "interfaces/user";
 
-export default class Url implements IController {
+export default class Url implements IControllerRest {
     public path: string;
     public router: Router;
     private userModel: Model<IUser>;

@@ -1,9 +1,12 @@
 import { Router, Request, Response } from "express";
 
-export interface IController {
+export class IController {
+    init() {}
     router: Router;
     path: string;
-    init(): void;
-    create(request: Request, response: Response): Promise<Response>;
-    index(request: Request, response: Response): Promise<Response>;
+}
+
+export class IControllerRest extends IController {
+    create(request: Request, response: Response) {}
+    index(request: Request, response: Response) {}
 }

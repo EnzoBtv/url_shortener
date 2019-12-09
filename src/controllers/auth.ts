@@ -5,13 +5,15 @@ import { sign } from "jsonwebtoken";
 import { IUser } from "interfaces/user";
 
 import Logger from "../tools/logger";
+import { IController } from "interfaces/controller";
 
-export default class Auth {
+export default class Auth extends IController {
     router: Router;
     path: string;
     userModel: Model<IUser>;
 
     constructor(connection: Connection) {
+        super();
         this.path = "/auth";
         this.router = Router();
         this.userModel = connection.model("user");
