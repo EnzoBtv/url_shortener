@@ -5,7 +5,7 @@ import { sign } from "jsonwebtoken";
 import { IUser } from "interfaces/user";
 
 import Logger from "../tools/logger";
-import { IController } from "interfaces/controller";
+import { IController } from "../interfaces/controller";
 
 export default class Auth extends IController {
     router: Router;
