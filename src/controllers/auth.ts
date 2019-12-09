@@ -24,7 +24,7 @@ export default class Auth extends IController {
         this.router.post(this.path, this.login);
     };
 
-    login = async (request: Request, response: Response): Promise<Response> => {
+    async login(request: Request, response: Response): Promise<Response> {
         try {
             const { email, password } = request.body;
             let user = await this.userModel.findOne({ email });
@@ -46,16 +46,34 @@ export default class Auth extends IController {
                 }
             );
             user.token = token;
+            user.recovering = false;
             user.save();
             return response.status(200).json({ token });
         } catch (ex) {
             Logger.error(`Erro no login| Erro: ${ex.message}`);
             response.status(500).json({ error: ex.message });
         }
-    };
+    }
 
-    recoverPassword(request: Request, response: Response) {
+    async recoverPassword(request: Request, response: Response) {
         try {
+            const { email } = request.body;
+            let recoveryUser = await this.userModel.findOneAndUpdate(
+                { email },
+                {
+                    recovering: true
+                }
+            );
+            if (!recoveryUser)
+                throw new Error(
+                    "Não foi encontrado nenhum usuário com esse email"
+                );
+            /**
+             * @TODO Mandar email para usuário com url personalizada
+             */
+            return response.status(200).json({
+                success: true
+            });
         } catch (ex) {
             Logger.error(`Erro na recuperação de senha | Erro: ${ex.message}`);
             response.status(500).json({ error: ex.message });

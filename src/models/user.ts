@@ -6,7 +6,8 @@ const User: Schema = new Schema({
     name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
-    token: { type: String, required: false }
+    token: { type: String, required: false },
+    recovering: { type: Boolean, required: false, default: false }
 });
 
 export default async (connection: Connection) => {
