@@ -5,6 +5,7 @@ import { sign } from "jsonwebtoken";
 import { IUser } from "interfaces/user";
 
 import Logger from "../tools/logger";
+import Mailer from "../tools/email";
 import { IController } from "../interfaces/controller";
 
 export default class Auth extends IController {
@@ -68,9 +69,13 @@ export default class Auth extends IController {
                 throw new Error(
                     "Não foi encontrado nenhum usuário com esse email"
                 );
-            /**
-             * @TODO Fazer tool de envio de email e fazer envio de email com url personalizada
-             */
+            let mailSender = new Mailer(
+                email,
+                "Recuperação de Senha Encurtador de URL",
+                `Para acessar sua plataforma no E-Login acesse essa url e redefina sua senha: ${"url"}`,
+                null
+            );
+            await mailSender.send();
             return response.status(200).json({
                 success: true
             });
