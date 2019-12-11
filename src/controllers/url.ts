@@ -23,6 +23,7 @@ export default class Url extends IControllerRest {
 
     init() {
         this.router.post(this.path, this.create);
+        this.router.put(this.path, this.edit);
         this.router.get(`${this.path}/:id`, this.index);
     }
 
@@ -39,7 +40,8 @@ export default class Url extends IControllerRest {
             return response.status(200).json(
                 await new this.urlModel({
                     originalUrl: url,
-                    newUrl
+                    newUrl,
+                    userId
                 }).save()
             );
         } catch (ex) {
@@ -56,28 +58,27 @@ export default class Url extends IControllerRest {
                 throw new Error(
                     "Não foi encontrada nenhuma url, por favor, entre em contato com o suporte"
                 );
-            return response.status(200).json({ url });
+            return response.status(200).json(url);
         } catch (ex) {
             Logger.error(`Erro no processamento da url | Erro: ${ex.message}`);
             response.status(500).json({ error: ex.message });
         }
     };
 
-    async edit(request: Request, response: Response) {
+    edit = async (request: Request, response: Response) => {
         try {
             const { newUrl, originalUrl, _id } = request.body;
             const duplicateUrl = await this.urlModel.findOne({
-                newUrl
+                newUrl,
+                _id: { $ne: _id }
             });
             if (duplicateUrl)
                 throw new Error(
                     "Já existe uma URL igual a essa cadastrada em nosso sistema"
                 );
             const updatedUrl = await this.urlModel.findByIdAndUpdate(_id, {
-                $set: {
-                    newUrl,
-                    originalUrl
-                }
+                newUrl,
+                originalUrl
             });
             if (!updatedUrl)
                 throw new Error(
@@ -88,5 +89,5 @@ export default class Url extends IControllerRest {
             Logger.error(`Erro no processamento da url | Erro: ${ex.message}`);
             response.status(500).json({ error: ex.message });
         }
-    }
+    };
 }

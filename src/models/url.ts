@@ -5,7 +5,7 @@ import logger from "../tools/logger";
 const Url: Schema = new Schema({
     originalUrl: { type: String, required: true },
     newUrl: { type: String, required: false },
-    userId: { type: Types.ObjectId, required: false }
+    userId: { type: Types.ObjectId, required: false, ref: "user" }
 });
 
 export default async (connection: Connection) => {
