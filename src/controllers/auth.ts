@@ -2,6 +2,7 @@ import { Router, Request, Response } from "express";
 import { Connection, Model } from "mongoose";
 import { enc, SHA512 } from "crypto-js";
 import { sign } from "jsonwebtoken";
+import { v4 } from "uuid";
 import { IUser } from "interfaces/user";
 
 import Logger from "../tools/logger";
@@ -47,7 +48,7 @@ export default class Auth extends IController {
                 }
             );
             user.token = token;
-            user.recovering = false;
+            user.recovering = undefined;
             user.save();
             return response.status(200).json({ token });
         } catch (ex) {
@@ -62,7 +63,7 @@ export default class Auth extends IController {
             let recoveryUser = await this.userModel.findOneAndUpdate(
                 { email },
                 {
-                    recovering: true
+                    recovering: v4()
                 }
             );
             if (!recoveryUser)
@@ -72,7 +73,7 @@ export default class Auth extends IController {
             let mailSender = new Mailer(
                 email,
                 "Recuperação de Senha Encurtador de URL",
-                `Para acessar sua plataforma no E-Login acesse essa url e redefina sua senha: ${"url"}`,
+                `Para acessar sua plataforma no E-Login acesse essa url e redefina sua senha: ${"url"}`, // htps://dominio/token/<userId>
                 null
             );
             await mailSender.send();

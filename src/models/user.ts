@@ -7,7 +7,7 @@ const User: Schema = new Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     token: { type: String, required: false },
-    recovering: { type: Boolean, required: false, default: false }
+    recovering: { type: String, required: false, default: false }
 });
 
 export default async (connection: Connection) => {
